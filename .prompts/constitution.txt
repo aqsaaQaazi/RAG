@@ -1,0 +1,48 @@
+/sp.constitution
+
+Project Name revolves around yet not exactly.  "Physical AI & Humanoid Robotics — Essentials"
+
+Purpose:
+Create a short, clean, professional AI-Native textbook based on the Physical AI & Humanoid Robotics course. 
+The book must serve as a fast, simple, high-quality learning resource built with a modern Docusaurus UI 
+and a fully integrated free-tier RAG chatbot.
+
+Scope:
+- 10 short chapters:
+  1. Introduction to Physical AI  
+  2. Basics of Humanoid Robotics  
+  3. ROS 2 Fundamentals  
+  4. Digital Twin Simulation (Gazebo + Isaac)  
+  5. Vision-Language-Action Systems  
+  6. Capstone: Simple AI-Robot Pipeline  
+- Clean UI
+- Free-tier friendly
+- Lightweight embeddings
+- Author's detail in the last page. 
+
+Core Principles:
+- Simplicity  
+- Accuracy  
+- straight-forward  
+- Fast builds  
+- Free-tier architecture
+- RAG "chatbot attached" answers ONLY from book text add guardrails
+
+Key Features:
+- Docusaurus textbook  
+- RAG chatbot (Qdrant + Neon + FastAPI)  
+- Select-text → Ask AI  
+- Optional Urdu / Personalize features
+- book could be translated into 5 major languages including urdu. and not hindi.
+
+Constraints:
+- No heavy GPU usage  
+- Minimal embeddings  
+
+Success Criteria:
+- Build success  
+- Accurate chatbot  
+- Modern Clean UI  
+- Smooth GitHub Pages deployment  
+
+Generate full constitution.
