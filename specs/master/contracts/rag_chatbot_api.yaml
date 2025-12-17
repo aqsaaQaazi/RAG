@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: RAG Chatbot API
+  version: 1.0.0
+  description: API for interacting with the RAG chatbot based on the Physical AI & Humanoid Robotics Textbook.
+
+servers:
+  - url: /api/v1/chat
+    description: Local development server
+  - url: https://your-deployed-backend.com/api/v1/chat # Placeholder for deployed backend
+    description: Production server
+
+paths:
+  /ask:
+    post:
+      summary: Ask a question to the RAG chatbot.
+      operationId: askRAGChatbot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Successful response from the chatbot.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          description: Bad request (e.g., invalid input).
+        '500':
+          description: Internal server error.
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          description: The user's question.
+          example: "What is the kinematic chain of a humanoid robot?"
+        context:
+          type: string
+          nullable: true
+          description: Optional selected text snippet from the book to provide context.
+          example: "A kinematic chain is a series of rigid bodies..."
+        language:
+          type: string
+          description: The preferred language for the response (ISO 639-1 code).
+          example: "en"
+          enum: ["en", "ur", "es", "fr", "de"] # Example languages, should match supported languages
+      required:
+        - query
+        - language
+
+    ChatResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+          description: The generated answer, grounded in the textbook content.
+          example: "The kinematic chain of a humanoid robot refers to..."
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+          description: List of references supporting the answer.
+        language:
+          type: string
+          description: The language of the answer.
+          example: "en"
+      required:
+        - answer
+        - citations
+        - language
+
+    Citation:
+      type: object
+      properties:
+        chapter_title:
+          type: string
+          description: Title of the chapter where the information is found.
+          example: "Chapter 3: Robot Kinematics"
+        section_heading:
+          type: string
+          description: Heading of the section within the chapter.
+          example: "Understanding Kinematic Chains"
+        url_anchor:
+          type: string
+          description: URL anchor for direct linking to the specific section.
+          example: "#understanding-kinematic-chains"
+      required:
+        - chapter_title
+        - section_heading
+        - url_anchor
