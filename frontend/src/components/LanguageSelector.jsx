@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 
 const LanguageSelector = ({ onLanguageChange, currentLanguage = 'en' }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage);
-  
+
   const languages = [
     { code: 'en', name: 'English' },
     { code: 'ur', name: 'Urdu' },
     { code: 'es', name: 'Spanish' },
     { code: 'fr', name: 'French' },
-    { code: 'de', name: 'German' }
+    { code: 'de', name: 'German' },
   ];
 
   const handleLanguageChange = (event) => {
@@ -32,7 +32,7 @@ const LanguageSelector = ({ onLanguageChange, currentLanguage = 'en' }) => {
           padding: '5px 10px',
           borderRadius: '4px',
           border: '1px solid #ccc',
-          fontSize: '14px'
+          fontSize: '14px',
         }}
       >
         {languages.map((lang) => (

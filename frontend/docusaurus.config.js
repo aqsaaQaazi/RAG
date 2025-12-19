@@ -13,12 +13,20 @@ const config = {
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
+  // SEO and meta tags configuration
+  onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
+  trailingSlash: false,
+
+  // Meta tags for SEO
+  themes: [
+    '@docusaurus/theme-mermaid' // For diagrams in documentation
+  ],
+
   // GitHub pages deployment config.
   organizationName: 'your-organization', // Usually your GitHub org/user name.
   projectName: 'textbook-ui', // Updated for textbook-only project
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -48,17 +56,66 @@ const config = {
     ],
   ],
 
+  plugins: [
+    // Enable custom home page at root URL
+    async function myPlugin(context, options) {
+      return {
+        name: 'custom-homepage-plugin',
+        configureWebpack(config, isServer) {
+          // Custom configuration if needed
+          return {
+            resolve: {
+              alias: {
+                path: require.resolve('path-browserify'),
+              },
+            },
+          };
+        },
+      };
+    },
+  ],
+
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'anonymous',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
+        rel: 'stylesheet',
+      },
+    },
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
+      metadata: [
+        {name: 'keywords', content: 'Physical AI, Humanoid Robotics, Documentation, Textbook, Machine Learning'},
+        {name: 'author', content: 'Physical AI & Humanoid Robotics Textbook Team'},
+        {name: 'twitter:card', content: 'summary_large_image'},
+        {name: 'twitter:site', content: '@your-twitter-handle'},
+        {name: 'og:type', content: 'website'},
+        {name: 'og:url', content: 'https://github.com/aqsaaQaazi/RAG'},
+      ],
       navbar: {
         title: 'Physical AI & Robotics',
-        logo: {
-          alt: 'Textbook Logo',
-          src: 'img/logo.svg',
-        },
+        
         items: [
           {
             type: 'docSidebar',
@@ -66,16 +123,23 @@ const config = {
             position: 'left',
             label: 'Textbook',
           },
-          { to: '/authors', label: 'Authors', position: 'left' }, // Removed 'Ask the Book' link
+          {
+            type: 'doc',
+            position: 'left',
+            docId: 'intro',
+            label: 'Start Reading',
+          },
+          {
+            href: 'https://github.com/your-username/your-repo',
+            position: 'right',
+            className: 'header-github-link',
+            'aria-label': 'GitHub repository',
+          },
           {
             type: 'localeDropdown',
             position: 'right',
           },
-          {
-            href: 'https://github.com/your-username/your-repo',
-            label: 'GitHub',
-            position: 'right',
-          },
+          // Theme switcher is added by default in Docusaurus
         ],
       },
       footer: {

@@ -1,0 +1,77 @@
+# API Contracts: Static Documentation Website (No RAG)
+
+## 1. Static Content API (Client-side)
+
+### 1.1 Get Documentation Content
+- **Endpoint**: `GET /docs/{path}`
+- **Description**: Retrieves static documentation content from pre-built files (simulated by Docusaurus routing)
+- **Request**:
+  - Path parameter: `path` (path to documentation file)
+  - Headers: `Accept: text/html`
+- **Response**:
+  - 200 OK: HTML content of the requested documentation page (pre-built by Docusaurus)
+  - 404 Not Found: Static HTML page indicating "Documentation page not found"
+
+### 1.2 Get Site Metadata
+- **Endpoint**: `GET /metadata.json`
+- **Description**: Returns static metadata about the documentation site
+- **Request**:
+  - Headers: `Accept: application/json`
+- **Response**:
+  - 200 OK: `{"title": "Physical AI & Humanoid Robotics Textbook", "description": "An interactive textbook on Physical AI & Humanoid Robotics", "version": "1.0", "lastBuilt": "2025-12-19T10:00:00Z", "languages": ["en"]}`
+
+## 2. Theme Management API (Client-side)
+
+### 2.1 Get Current Theme Preference
+- **Endpoint**: `GET /api/theme` (simulated client-side API)
+- **Description**: Returns the current theme preference from browser storage
+- **Request**:
+  - Headers: `Accept: application/json`
+- **Response**:
+  - 200 OK: `{"theme": "light", "systemTheme": "dark", "userPreference": "light"}` (client-side data)
+
+### 2.2 Update Theme Preference
+- **Endpoint**: `POST /api/theme` (simulated client-side API)
+- **Description**: Updates the user's theme preference in browser storage
+- **Request**:
+  - Headers: `Content-Type: application/json`
+  - Body: `{"theme": "light"}` or `{"theme": "dark"}`
+- **Response**:
+  - 200 OK: `{"theme": "light", "message": "Theme preference updated"}`
+
+## 3. Accessibility Features API (Client-side)
+
+### 3.1 Get Accessibility Settings
+- **Endpoint**: `GET /api/accessibility` (simulated client-side API)
+- **Description**: Returns current accessibility settings from browser storage
+- **Request**:
+  - Headers: `Accept: application/json`
+- **Response**:
+  - 200 OK: `{"settings": {"highContrast": false, "fontSize": "normal", "readableFont": true}}` (client-side data)
+
+### 3.2 Update Accessibility Settings
+- **Endpoint**: `POST /api/accessibility` (simulated client-side API)
+- **Description**: Updates user's accessibility preferences in browser storage
+- **Request**:
+  - Headers: `Content-Type: application/json`
+  - Body: `{"settings": {"highContrast": true}}`
+- **Response**:
+  - 200 OK: `{"settings": {"highContrast": true}, "message": "Accessibility settings updated"}`
+
+## 4. Static Search API (Client-side)
+
+### 4.1 Search Documentation Content
+- **Endpoint**: `GET /api/search` (simulated client-side search)
+- **Description**: Searches through static documentation content
+- **Request**:
+  - Query parameters: `q=term&page=1&limit=10`
+  - Headers: `Accept: application/json`
+- **Response**:
+  - 200 OK: `{"results": [{"title": "Page Title", "url": "/docs/page-url", "preview": "Preview snippet..."}, ...], "totalResults": 5, "currentPage": 1, "hasMore": false}`
+  - All search performed client-side using pre-built static indices
+
+## Notes
+- This API is all client-side simulated functionality
+- No real backend services exist in this static implementation
+- All data is served from static files and client-side storage
+- Actual functionality is handled by Docusaurus and browser APIs

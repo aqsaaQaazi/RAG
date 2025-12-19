@@ -16,7 +16,7 @@ class ErrorBoundary extends React.Component {
     console.error('Error caught by boundary:', error, errorInfo);
     this.setState({
       error: error,
-      errorInfo: errorInfo
+      errorInfo: errorInfo,
     });
   }
 
@@ -28,7 +28,10 @@ class ErrorBoundary extends React.Component {
           <h3>Something went wrong.</h3>
           <details className="margin--md">
             <summary>Error details</summary>
-            <pre className="padding--md" style={{background: '#f8f8f8', borderRadius: '4px'}}>
+            <pre
+              className="padding--md"
+              style={{ background: '#f8f8f8', borderRadius: '4px' }}
+            >
               {this.state.error && this.state.error.toString()}
             </pre>
           </details>
@@ -36,7 +39,7 @@ class ErrorBoundary extends React.Component {
       );
     }
 
-    return this.props.children; 
+    return this.props.children;
   }
 }
 

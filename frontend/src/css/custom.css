@@ -1,72 +1,224 @@
 /**
- * Custom CSS for the Physical AI & Humanoid Robotics Textbook
- * Implements responsive design and accessibility features
+ * Custom CSS with accessibility focus for the Docusaurus documentation website
+ * Implements high contrast, keyboard navigation, and semantic HTML support
  */
 
-/* Ensure sufficient color contrast */
+/* You can override the default Infima variables here to ensure proper theme support. */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-hero-background-color: #f6f8fa;
+  --ifm-hero-text-color: #242526;
+  --ifm-hero-title-color: #1c1e21;
+  --ifm-background-color: #ffffff;
+  --ifm-color-content: #242526;
+  --ifm-color-content-inverse: #ffffff;
+  --ifm-color-emphasis-0: #000;
+  --ifm-color-emphasis-100: #111;
+  --ifm-color-emphasis-200: #222;
+  --ifm-color-emphasis-300: #333;
+  --ifm-color-emphasis-400: #525252;
+  --ifm-color-emphasis-500: #737373;
+  --ifm-color-emphasis-600: #a3a3a3;
+  --ifm-color-emphasis-700: #d4d4d4;
+  --ifm-color-emphasis-800: #e5e5e5;
+  --ifm-color-emphasis-900: #f5f5f5;
+  --ifm-color-emphasis-1000: #fff;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-hero-background-color: #242526;
+  --ifm-hero-text-color: #ebedf0;
+  --ifm-hero-title-color: #ffffff;
+  --ifm-background-color: #18191a;
+  --ifm-color-content: #ffffff;
+  --ifm-color-content-inverse: #242526;
+  --ifm-color-emphasis-0: #fff;
+  --ifm-color-emphasis-100: #e5e5e5;
+  --ifm-color-emphasis-200: #d4d4d4;
+  --ifm-color-emphasis-300: #a3a3a3;
+  --ifm-color-emphasis-400: #737373;
+  --ifm-color-emphasis-500: #525252;
+  --ifm-color-emphasis-600: #404040;
+  --ifm-color-emphasis-700: #262626;
+  --ifm-color-emphasis-800: #171717;
+  --ifm-color-emphasis-900: #0a0a0a;
+  --ifm-color-emphasis-1000: #000;
+}
+
+/* Ensure sufficient color contrast - minimum 4.5:1 ratio */
 body {
-  color: #333;
-  background-color: #fff;
+  color: var(--ifm-color-content);
+  background-color: var(--ifm-background-color);
+  font-size: 100%; /* Allows user scaling */
+  line-height: 1.6;
 }
 
-/* Custom styles for textbook content */
-.textbook-content {
-  font-size: 1.1rem;
-  line-height: 1.7;
+/* Enhanced theme-specific body styles for better contrast */
+html[data-theme='light'] {
+  --ifm-background-color: var(--ifm-color-white);
+  --ifm-font-color-base: var(--ifm-color-emphasis-900);
 }
 
-/* Heading styles */
-h1, h2, h3, h4, h5, h6 {
-  color: #2c3e50;
+html[data-theme='dark'] {
+  --ifm-background-color: var(--ifm-color-gray-900);
+  --ifm-font-color-base: var(--ifm-color-emphasis-100);
 }
 
-/* Link styles */
+/* High contrast for text */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--ifm-color-emphasis-0);
+  font-weight: 600;
+}
+
+/* Specific styles for hero section to ensure proper theme support */
+.hero--primary {
+  background-color: var(--ifm-hero-background-color);
+  color: var(--ifm-hero-text-color);
+}
+
+.hero__title {
+  color: var(--ifm-hero-title-color, var(--ifm-color-emphasis-0));
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.hero__subtitle {
+  color: var(--ifm-hero-text-color, var(--ifm-color-emphasis-500));
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Ensure proper color handling in different themes */
+html[data-theme='light'] .hero--primary {
+  background-color: var(--ifm-color-primary-lighter);
+  color: var(--ifm-color-emphasis-900);
+}
+
+html[data-theme='dark'] .hero--primary {
+  background-color: var(--ifm-color-emphasis-900);
+  color: var(--ifm-color-emphasis-00);
+}
+
+html[data-theme='light'] .hero__title {
+  color: var(--ifm-color-emphasis-900);
+}
+
+html[data-theme='dark'] .hero__title {
+  color: var(--ifm-color-emphasis-00);
+}
+
+html[data-theme='light'] .hero__subtitle {
+  color: var(--ifm-color-emphasis-600);
+}
+
+html[data-theme='dark'] .hero__subtitle {
+  color: var(--ifm-color-emphasis-300);
+}
+
+/* Link styles with good contrast */
 a {
-  color: #3498db;
-}
-
-a:hover {
-  color: #2980b9;
+  color: #005fcc;
   text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
 }
 
-/* Button styles */
+a:visited {
+  color: #a458a7;
+}
+
+a:hover,
+a:focus {
+  text-decoration-thickness: 3px;
+}
+
+/* Strong focus indicators for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Button styles with accessibility in mind */
 .button--primary {
-  background-color: #3498db;
-  border-color: #3498db;
+  background-color: #005fcc;
+  border-color: #005fcc;
+  color: white;
 }
 
-.button--primary:hover {
-  background-color: #2980b9;
-  border-color: #2980b9;
+.button--primary:hover,
+.button--primary:focus {
+  background-color: #004999;
+  border-color: #004999;
+  color: white;
 }
 
-/* Card styles */
+/* Card styles with sufficient contrast */
 .card {
-  border: 1px solid #e1e1e1;
+  border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
-/* Responsive design */
+/* Responsive design adjustments */
 @media (max-width: 768px) {
   .container {
     padding: 0 15px;
   }
-  
+
   h1 {
-    font-size: 1.8rem;
+    font-size: 1.75rem;
+    line-height: 1.2;
   }
-  
+
   h2 {
     font-size: 1.5rem;
+    line-height: 1.25;
   }
-  
+
   h3 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  /* Ensure touch targets are at least 44px */
+  button,
+  a.button,
+  .theme-toggle {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 12px;
   }
 }
 
-/* Accessibility improvements */
+/* Screen reader only content */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -79,59 +231,231 @@ a:hover {
   border: 0;
 }
 
-/* Focus indicators for keyboard navigation */
-a:focus,
-button:focus,
-input:focus,
-select:focus,
-textarea:focus {
-  outline: 2px solid #3498db;
-  outline-offset: 2px;
+.sr-only.focusable:active,
+.sr-only.focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }
 
-/* Custom scrollbar */
+/* Semantic HTML elements */
+main {
+  display: block;
+}
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #005fcc;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0 0 8px 8px;
+  z-index: 1000;
+}
+
+.skip-to-main:focus {
+  top: 0;
+}
+
+/* Heading hierarchy for assistive technologies */
+h1 {
+  font-size: 2rem;
+  margin-top: 1.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+h4 {
+  font-size: 1.1rem;
+  margin-top: 1.25rem;
+}
+
+/* List styling for better screen reader experience */
+ul,
+ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.25rem;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate,
+  .fade-in,
+  .slide-in {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --ifm-color-emphasis-0: #000;
+    --ifm-color-emphasis-1000: #fff;
+  }
+
+  [data-theme='dark'] {
+    --ifm-color-emphasis-0: #fff;
+    --ifm-color-emphasis-1000: #000;
+  }
+
+  body {
+    background-color: var(--ifm-color-emphasis-1000);
+    color: var(--ifm-color-emphasis-0);
+  }
+
+  a {
+    color: #0000ee;
+    text-decoration: underline;
+  }
+
+  a:visited {
+    color: #551a8b;
+  }
+}
+
+/* Print styles */
+@media print {
+  .theme-toggle,
+  .header-github-link,
+  .pagination-nav,
+  .theme-edit-this-page {
+    display: none;
+  }
+
+  .footer {
+    border-top: 1px solid #000;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  a:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    display: inline-block;
+  }
+}
+
+/* Ensure interactive elements are appropriately sized */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  min-height: 40px;
+  min-width: 40px;
+  padding: 8px 16px;
+}
+
+/* Custom scrollbar with better accessibility */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #b8b8b8;
-  border-radius: 4px;
+  background: var(--ifm-color-emphasis-400);
+  border-radius: 6px;
+  border: 2px solid var(--ifm-color-emphasis-200);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #999;
+  background: var(--ifm-color-emphasis-500);
 }
 
-/* Diagram container for responsive images */
-.diagram-container {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.diagram-container img,
-.diagram-container svg {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Code block styling */
+/* Code block styling for accessibility */
 code {
-  background-color: #f8f8f8;
-  padding: 2px 4px;
+  background-color: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-900);
+  padding: 2px 6px;
   border-radius: 3px;
   font-size: 0.9em;
 }
 
 pre code {
   display: block;
-  padding: 12px 15px;
+  padding: 16px;
   overflow-x: auto;
-  border-radius: 5px;
-  background-color: #2d2d2d;
-  color: #f8f8f2;
+  border-radius: 6px;
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+/* Image accessibility */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Right-to-left language support (Urdu) */
+html[dir="rtl"] {
+  text-align: right;
+}
+
+html[dir="rtl"] .container,
+html[dir="rtl"] .markdown,
+html[dir="rtl"] .main-wrapper,
+html[dir="rtl"] .hero__title,
+html[dir="rtl"] .hero__subtitle {
+  text-align: right;
+}
+
+/* Adjust button and link positions in RTL */
+html[dir="rtl"] .buttons {
+  justify-content: center;
+}
+
+/* Specific RTL styles for navigation */
+html[dir="rtl"] .navbar__items {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .navbar__item {
+  margin-right: 0;
+  margin-left: var(--ifm-navbar-item-padding-horizontal);
+}
+
+html[dir="rtl"] .navbar__toggle {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+html[dir="rtl"] .footer-links {
+  justify-content: center;
+}
+
+html[dir="rtl"] .footer-link {
+  margin-right: 0;
+  margin-left: 1.5rem;
 }

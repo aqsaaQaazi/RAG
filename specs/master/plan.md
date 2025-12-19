@@ -1,68 +1,53 @@
-# Implementation Plan: Physical AI & Humanoid Robotics Textbook
+# Implementation Plan: Simple Static Documentation Website (No RAG)
 
-**Branch**: `master` | **Date**: 2025-12-17 | **Spec**: [link to spec]
-**Input**: Feature specification from `/specs/1-generate-textbook/spec.md`
+**Branch**: `master` | **Date**: 2025-12-19 | **Spec**: [link to spec]
+**Input**: Feature specification from `/specs/master/spec.md`
 
 **Note**: This template is filled in by the `/sp.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
 ## Summary
 
-This feature implements a Physical AI & Humanoid Robotics textbook with an integrated RAG chatbot. The system consists of a Docusaurus-powered frontend for textbook presentation and a Python-based RAG backend that provides contextual answers from the textbook content using vector embeddings in Qdrant and metadata in Neon PostgreSQL.
-
-The solution uses Google Cloud Run for backend deployment, Vertex AI for embeddings and LLMs, and GitHub Pages for frontend hosting. The approach emphasizes free-tier friendly infrastructure while maintaining the ability to answer user questions with proper citations to specific textbook sections.
+This feature implements a simple Docusaurus-based static documentation website without any RAG (Retrieval Augmented Generation) functionality. The implementation focuses on serving static content with a clean homepage at the root URL, simplified header with only navigation and book name, and full English-only documentation content. The site includes theme switching (light/dark) and accessibility features, but removes all backend API functionality and dynamic content generation.
 
 ## Technical Context
 
-**Language/Version**: Python 3.8+ (for RAG backend), JavaScript/TypeScript (for Docusaurus frontend)
-**Primary Dependencies**:
-  - Backend: FastAPI, LangChain, Hugging Face Transformers, Qdrant client, Neon (PostgreSQL) client, Google Cloud Vertex AI SDK
-  - Frontend: Docusaurus, React
-**Storage**: Qdrant (vector database for embeddings), Neon (PostgreSQL) for metadata storage
-**Testing**: Pytest (backend unit tests), RAGAS/DeepEval/TruLens (RAG-specific evaluation), Jest and React Testing Library (frontend)
-**Target Platform**: Web application (Docusaurus frontend served via GitHub Pages, Python RAG backend deployed on Google Cloud Run)
-**Project Type**: Web application with backend API (Docusaurus frontend + Python RAG backend API)
-**Performance Goals**:
-  - RAG chatbot response time (p95) under 8 seconds on free-tier infrastructure
-  - Fast builds and deployment to GitHub Pages
-  - Efficient ingestion and embedding of textbook content
-**Constraints**:
-  - Free-tier friendly infrastructure (Google Cloud Run, Vertex AI, Neon, Qdrant)
-  - Lightweight embedding models and CPU-friendly LLMs (or hosted equivalents)
-  - Low temperature and small max tokens settings for LLMs
-  - Minimal logging (avoid privacy-sensitive user questions)
-  - RAG answers grounded only in textbook content
-**Scale/Scope**:
-  - 10 short chapters of Physical AI & Humanoid Robotics textbook
-  - Support for 5 major languages (including Urdu, excluding Hindi)
-  - Support for citation of sources with chapter, heading, and URL anchors
+**Language/Version**: JavaScript/TypeScript (for Docusaurus), Node.js v18+ for build process
+**Primary Dependencies**: Docusaurus v3.x, React 18+, @docusaurus/preset-classic
+**Storage**: Static file hosting (GitHub Pages) - no database or backend API
+**Testing**: Jest for unit tests, Cypress for end-to-end tests, React Testing Library for component tests
+**Target Platform**: Static website optimized for modern browsers (Chrome, Firefox, Safari, Edge)
+**Project Type**: Static site with no backend services
+**Performance Goals**: Fast builds and deployment to GitHub Pages, page load time <3 seconds on average connection
+**Constraints**: Static content only (no dynamic API calls), WCAG 2.1 AA compliance for accessibility, SEO-optimized with semantic HTML, no external dependencies for core functionality
+**Scale/Scope**: Single documentation site with English-only content
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-### Gate 1: Library-First Approach
+### Gate 1: Accessibility First
 - **Status**: PASSED
-- **Justification**: The RAG system will be built as a modular library with clear separation of concerns (data processing, embedding, retrieval, generation) that can potentially be reused.
+- **Justification**: The design will use semantic HTML elements, follow WCAG 2.1 AA standards, and be tested with screen readers to ensure accessibility.
 
-### Gate 2: CLI Interface
+### Gate 2: User Experience Priority
 - **Status**: PASSED
-- **Justification**: The backend will expose functionality via a CLI for data ingestion, and the API will follow text-in/text-out protocols.
+- **Justification**: The design prioritizes a clean, simple homepage at the root URL with intuitive navigation elements (Start Reading, GitHub link, theme switcher).
 
 ### Gate 3: Test-First (NON-NEGOTIABLE)
 - **Status**: PASSED
-- **Justification**: Testing framework established (Pytest for backend, Jest/RTL for frontend, RAGAS for RAG-specific evaluation).
+- **Justification**: Testing framework established (Jest, Cypress, React Testing Library) with plans to write tests for all functionality before implementation.
 
-### Gate 4: Integration Testing
+### Gate 4: Performance Conscious
 - **Status**: PASSED
-- **Justification**: Integration tests needed for RAG pipeline (ingestion→embedding→retrieval→generation) and inter-service communication (frontend→backend→Qdrant/Neon).
+- **Justification**: Using static site generation with Docusaurus ensures fast loading times, and performance metrics will be monitored to ensure <3s load times and 90+ Lighthouse scores.
 
-### Gate 5: Observability and Performance
+### Gate 5: Simplicity and Clarity
 - **Status**: PASSED
-- **Justification**: Logging requirements defined (minimal for privacy) with performance goal of <8s response time (p95) on free-tier infrastructure.
+- **Justification**: Starting with core functionality (simple homepage, theme switching, English-only documentation) following YAGNI principles. Content will be written in simple, easy-to-understand language.
 
-### Gate 6: Simplicity
+### Gate 6: Internationalization Support
 - **Status**: PASSED
-- **Justification**: Starting with core functionality first (10-chapter textbook with RAG chatbot) following YAGNI principles.
+- **Justification**: While implementing English-only content for this release, the architecture will maintain readiness for future multilingual support by preserving i18n-ready structures.
 
 ## Project Structure
 
@@ -76,99 +61,45 @@ specs/master/
 ├── quickstart.md        # Phase 1 output (/sp.plan command)
 ├── contracts/           # Phase 1 output (/sp.plan command)
 └── tasks.md             # Phase 2 output (/sp.tasks command - NOT created by /sp.plan)
-
-specs/1-generate-textbook/
-└── spec.md              # Feature specification
 ```
 
 ### Source Code (repository root)
 
-```text
-backend/
-├── src/
-│   ├── models/
-│   │   ├── textbook_content.py      # Textbook content entity
-│   │   ├── chapter.py               # Chapter entity
-│   │   ├── text_chunk.py            # Text chunk entity
-│   │   ├── user_query.py            # User query entity
-│   │   ├── chatbot_answer.py        # Chatbot answer entity
-│   │   └── source_citation.py       # Source citation entity
-│   ├── services/
-│   │   ├── rag_service.py           # Main RAG service
-│   │   ├── embedding_service.py     # Embedding generation and storage
-│   │   ├── retrieval_service.py     # Text retrieval from vector database
-│   │   ├── generation_service.py    # Answer generation with citations
-│   │   └── ingestion_service.py     # Content ingestion and preprocessing
-│   ├── api/
-│   │   ├── main.py                  # FastAPI app definition
-│   │   ├── routes/
-│   │   │   ├── chat.py              # Chatbot API endpoints
-│   │   │   └── ingestion.py         # Ingestion API endpoints
-│   │   └── middleware/
-│   │       └── cors.py              # CORS configuration
-│   └── cli/
-│       └── ingest.py                # CLI for content ingestion
-├── tests/
-│   ├── unit/
-│   │   ├── models/
-│   │   ├── services/
-│   │   └── api/
-│   ├── integration/
-│   │   └── rag_pipeline_test.py     # Full RAG pipeline integration tests
-│   └── contract/
-│       └── rag_api_test.py          # API contract tests
-├── requirements.txt                 # Python dependencies
-├── Dockerfile                       # Containerization for deployment
-└── config/
-    └── settings.py                  # Configuration settings
-
 frontend/
-├── docs/
-│   ├── 01-introduction.md           # Chapter 1
-│   ├── 02-foundations-of-physical-ai.md  # Chapter 2
-│   ├── 03-humanoid-robot-design.md  # Chapter 3
-│   ├── 04-locomotion-and-control.md # Chapter 4
-│   ├── 05-sensing-and-perception.md # Chapter 5
-│   ├── 06-learning-algorithms.md    # Chapter 6
-│   ├── 07-hardware-integration.md   # Chapter 7
-│   ├── 08-ethics-and-safety.md      # Chapter 8
-│   ├── 09-future-directions.md      # Chapter 9
-│   └── 10-conclusion.md             # Chapter 10
+├── docs/                  # English documentation content only
+│   ├── 01-introduction.md
+│   ├── 02-foundations-of-physical-ai.md
+│   ├── 03-humanoid-robot-design.md
+│   ├── 04-locomotion-and-control.md
+│   ├── 05-sensing-and-perception.md
+│   ├── 06-learning-algorithms.md
+│   ├── 07-hardware-integration.md
+│   ├── 08-ethics-and-safety.md
+│   ├── 09-future-directions.md
+│   └── 10-conclusion.md
 ├── src/
-│   ├── components/
-│   │   ├── TextbookViewer.jsx       # Textbook reader component
-│   │   ├── ChatWithBook.jsx         # RAG chat interface
-│   │   ├── SelectionPopup.jsx       # Text selection popup
-│   │   └── LanguageSelector.jsx     # Language selection component
-│   ├── pages/
-│   │   ├── AskTheBook.jsx           # Dedicated "Ask the Book" page
-│   │   └── AuthorDetails.jsx        # Author details page
-│   └── css/
-│       └── custom.css               # Custom styling
-├── static/
-│   ├── img/
-│   │   └── humanoid-robot.svg       # Robotic diagrams and images
-│   └── js/
-│       └── text-selection.js        # Text selection feature implementation
-├── docusaurus.config.js             # Docusaurus configuration
-├── sidebars.js                      # Sidebar navigation configuration
-├── package.json                     # Frontend dependencies
-└── i18n/                            # Internationalization files
-    ├── en/
-    ├── ur/
-    └── es/                          # And 3 other language directories
-```
+│   ├── components/        # Custom reusable React components (no RAG components)
+│   │   ├── HomepageFeatures.js      # Homepage features section
+│   │   └── ThemeToggle.js          # Theme switching component
+│   ├── pages/             # React components for non-docs pages
+│   │   └── index.js       # Custom homepage component (no RAG chat interface)
+│   └── css/               # Custom styles
+├── static/                # Static files (images, icons, etc.)
+├── package.json           # NPM package configuration
+├── docusaurus.config.js   # Main Docusaurus configuration (English-only)
+├── sidebars.js            # Sidebar navigation configuration (minimal)
+└── babel.config.js        # Babel configuration
 
-**Structure Decision**: Selected the web application structure option with separate backend and frontend directories. The backend uses a Python-based RAG architecture with FastAPI, while the frontend uses Docusaurus with React for the textbook presentation and chatbot interface.
+specs/master/contracts/
+└── static-content-api.yaml     # (No RAG API contracts - this would be removed)
 
-## Summary of Planning
+**Structure Decision**: Selected the static website structure with Docusaurus for documentation only. The project will have a custom homepage at the root URL, with documentation content in English only. All RAG (Retrieval Augmented Generation) functionality removed.
 
-This implementation plan details the architecture for a Physical AI & Humanoid Robotics textbook with an integrated RAG chatbot. The plan includes:
+## Complexity Tracking
 
-- Technical context with specific technologies, dependencies, and constraints
-- Constitution check ensuring the approach aligns with project principles
-- Detailed project structure for both backend and frontend components
-- All necessary components for the RAG system, multilingual support, and textbook presentation
+> **Fill ONLY if Constitution Check has violations that must be justified**
 
-The plan is now complete and ready for the next phase: detailed task breakdown and implementation.
-
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+|-----------|------------|-------------------------------------|
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |

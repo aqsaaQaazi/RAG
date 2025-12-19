@@ -1,0 +1,70 @@
+# API Contracts: RAG Backend Services
+
+## 1. RAG Chatbot API
+
+### 1.1 Submit Query to Chatbot
+- **Endpoint**: `POST /api/chat/query`
+- **Description**: Submit a question to the RAG chatbot to receive an answer grounded in textbook content
+- **Request**:
+  - Headers: `Content-Type: application/json`
+  - Body: `{"question": "What are the key principles of humanoid robotics?", "language": "en", "includeCitations": true}`
+- **Response**:
+  - 200 OK: `{"answer": "Humanoid robotics involves several key principles...", "sources": [{"chapterTitle": "Humanoid Robot Design", "heading": "Key Principles", "urlAnchor": "#key-principles", "snippet": "The key principles include..."}, ...]}`
+  - 400 Bad Request: `{ "error": "Question is required" }`
+  - 422 Unprocessable Entity: `{ "error": "Question is too long" }`
+  - 500 Internal Server Error: `{ "error": "Unable to process the query" }`
+
+### 1.2 Health Check
+- **Endpoint**: `GET /api/health`
+- **Description**: Check if the RAG backend is operational
+- **Request**:
+  - Headers: `Accept: application/json`
+- **Response**:
+  - 200 OK: `{"status": "healthy", "timestamp": "2025-12-19T10:00:00Z", "version": "1.0.0"}`
+  - 503 Service Unavailable: `{"status": "unhealthy", "error": "Vector database connection failed"}`
+
+## 2. Content Ingestion API
+
+### 2.1 Ingest Textbook Content
+- **Endpoint**: `POST /api/ingestion/textbook`
+- **Description**: Ingest and process textbook content for RAG system
+- **Request**:
+  - Headers: `Content-Type: application/json`
+  - Body: `{"title": "Physical AI & Humanoid Robotics", "language": "en", "chapters": [{"title": "Chapter 1", "content": "Content of chapter 1..."}, ...]}`
+- **Response**:
+  - 201 Created: `{"message": "Textbook content ingested successfully", "processedChunks": 245, "duration": 45.2}`
+  - 400 Bad Request: `{ "error": "Title and content are required" }`
+  - 500 Internal Server Error: `{ "error": "Unable to process textbook content" }`
+
+### 2.2 Check Processing Status
+- **Endpoint**: `GET /api/ingestion/status/{taskId}`
+- **Description**: Check the status of an ongoing ingestion task
+- **Request**:
+  - Path Parameter: `taskId` (UUID of the ingestion task)
+  - Headers: `Accept: application/json`
+- **Response**:
+  - 200 OK: `{"taskId": "abc-123", "status": "processing", "progress": 0.65, "chunksProcessed": 160, "totalChunks": 245}`
+  - 404 Not Found: `{ "error": "Task not found" }`
+  - 500 Internal Server Error: `{ "error": "Unable to retrieve task status" }`
+
+## 3. Metadata API
+
+### 3.1 Get Textbook Metadata
+- **Endpoint**: `GET /api/metadata/textbooks`
+- **Description**: Get metadata about available textbooks in the system
+- **Request**:
+  - Headers: `Accept: application/json`
+- **Response**:
+  - 200 OK: `{"textbooks": [{"id": "phy-ai-robotics", "title": "Physical AI & Humanoid Robotics", "language": "en", "chaptersCount": 10, "totalChunks": 245, "lastUpdated": "2025-12-19T09:30:00Z"}, ...]}`
+  - 500 Internal Server Error: `{ "error": "Unable to retrieve textbook metadata" }`
+
+## 4. Performance Monitoring API
+
+### 4.1 Get Performance Metrics
+- **Endpoint**: `GET /api/performance/metrics`
+- **Description**: Retrieve system performance metrics for monitoring
+- **Request**:
+  - Headers: `Accept: application/json`
+- **Response**:
+  - 200 OK: `{"metrics": {"avgResponseTime": 4.2, "p95ResponseTime": 7.1, "totalQueries": 4567, "successRate": 0.987, "activeSessions": 23}}`
+  - 500 Internal Server Error: `{ "error": "Unable to retrieve performance metrics" }`

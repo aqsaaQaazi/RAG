@@ -1,108 +1,81 @@
-# Data Model for Physical AI & Humanoid Robotics Textbook Feature
+# Data Model: Simple Static Documentation Website (No RAG)
 
-## Entity: Textbook Content
+## Entities
 
-**Description**: The raw Markdown/MDX files for chapters, diagrams, and code snippets.
+### Homepage
+- **Description**: The main landing page accessible at the root URL
+- **Fields**:
+  - id: string (unique identifier)
+  - title: string (page title)
+  - content: string (main content in markdown/html)
+  - language: string (language code, 'en' only)
+  - theme: string ('light' or 'dark', defaults to system preference)
+  - navigationItems: array of NavigationItem objects
+- **Relationships**: None
 
-**Fields**:
-- `id`: Unique identifier (UUID)
-- `filename`: Original filename (string)
-- `content`: Raw text content (string)
-- `language`: Language of the content (string, e.g., 'en', 'ur')
-- `last_modified`: Timestamp of last modification (datetime)
+### NavigationItem
+- **Description**: Item in the website navigation
+- **Fields**:
+  - id: string (unique identifier)
+  - label: string (display text)
+  - url: string (target URL)
+  - type: string ('internal' or 'external')
+- **Relationships**: Part of Homepage
 
-## Entity: Chapter
+### Header Component
+- **Description**: Contains book name and navigation elements only (no logos)
+- **Fields**:
+  - id: string (unique identifier)
+  - bookName: string (book title)
+  - theme: string ('light' or 'dark')
+  - navigationItems: array of NavigationItem objects
+- **Relationships**: Associated with all pages
 
-**Description**: A discrete section of the textbook.
+### Footer Component
+- **Description**: Contains important links
+- **Fields**:
+  - id: string (unique identifier)
+  - links: array of FooterLink objects
+  - copyrightText: string
+- **Relationships**: Associated with all pages
 
-**Fields**:
-- `id`: Unique identifier (UUID)
-- `textbook_content_id`: Foreign key to `Textbook Content` (UUID)
-- `title`: Chapter title (string)
-- `order`: Chapter order in the textbook (integer)
-- `slug`: URL-friendly identifier for the chapter (string)
-- `content_summary`: A brief summary of the chapter's content (string)
-- `key_ideas`: List of key ideas in the chapter (list of strings)
-- `practical_checklist`: List of practical checklist items (list of strings)
+#### FooterLink
+- **Description**: Individual link in the footer
+- **Fields**:
+  - id: string (unique identifier)
+  - text: string (display text)
+  - href: string (target URL)
+- **Relationships**: Part of Footer Component
 
-**Relationships**:
-- One-to-one with `Textbook Content` (a chapter is derived from specific textbook content).
+### Theme Manager
+- **Description**: Handles theme switching and system preference detection
+- **Fields**:
+  - id: string (unique identifier)
+  - currentTheme: string ('light' or 'dark')
+  - systemTheme: string ('light' or 'dark')
+  - userPreference: string ('light' or 'dark', null if following system)
+- **Relationships**: Associated with all pages
 
-**Validation Rules**:
-- `title` must be unique per language.
-- `order` must be unique per language.
+### Documentation Content
+- **Description**: Static documentation content in English only
+- **Fields**:
+  - id: string (unique identifier)
+  - title: string (content title)
+  - content: string (content in markdown/html)
+  - language: string (language code, 'en' only)
+  - filePath: string (relative path to the documentation file)
+  - seoMetadata: SEO metadata object
+  - accessibilityTags: array of string (semantic HTML tags used)
+  - order: integer (order in documentation sequence)
+- **Relationships**: None (English-only static content)
 
-## Entity: Text Chunk
-
-**Description**: Segmented pieces of textbook content used for RAG ingestion and retrieval.
-
-**Fields**:
-- `id`: Unique identifier (UUID)
-- `chapter_id`: Foreign key to `Chapter` (UUID)
-- `textbook_content_id`: Foreign key to `Textbook Content` (UUID)
-- `content`: Segmented text (string)
-- `embedding`: Vector embedding of the content (vector array)
-- `section_heading`: Heading of the section the chunk belongs to (string, nullable)
-- `url_anchor`: URL anchor for direct linking to the section (string, nullable)
-- `language`: Language of the chunk (string, e.g., 'en', 'ur')
-
-**Relationships**:
-- Many-to-one with `Chapter`.
-- Many-to-one with `Textbook Content`.
-
-**Validation Rules**:
-- `content` length within embedding model limits.
-
-## Entity: User Query
-
-**Description**: Text input from the user for the RAG chatbot.
-
-**Fields**:
-- `id`: Unique identifier (UUID)
-- `session_id`: Session identifier for conversation history (UUID)
-- `query_text`: The user's question (string)
-- `timestamp`: Time of the query (datetime)
-- `language`: Language of the query (string, e.g., 'en', 'ur')
-- `selected_context`: Optional: Selected text snippet from the book (string, nullable)
-
-## Entity: Chatbot Answer
-
-**Description**: The response generated by the LLM, grounded in retrieved textbook content.
-
-**Fields**:
-- `id`: Unique identifier (UUID)
-- `user_query_id`: Foreign key to `User Query` (UUID)
-- `answer_text`: The generated answer (string)
-- `timestamp`: Time of the answer (datetime)
-- `language`: Language of the answer (string, e.g., 'en', 'ur')
-- `llm_model`: Name of the LLM model used (string)
-- `embedding_model`: Name of the embedding model used (string)
-
-**Relationships**:
-- One-to-one with `User Query`.
-
-## Entity: Source Citation
-
-**Description**: References to specific parts of the textbook supporting a chatbot answer.
-
-**Fields**:
-- `id`: Unique identifier (UUID)
-- `chatbot_answer_id`: Foreign key to `Chatbot Answer` (UUID)
-- `chapter_id`: Foreign key to `Chapter` (UUID)
-- `section_heading`: Heading of the cited section (string)
-- `url_anchor`: URL anchor for direct linking (string)
-
-**Relationships**:
-- Many-to-one with `Chatbot Answer`.
-- Many-to-one with `Chapter`.
-
-## Entity: Language Preference
-
-**Description**: User's chosen language for the textbook and chatbot.
-
-**Fields**:
-- `user_id`: Identifier for the user (UUID, or session ID for anonymous users)
-- `preferred_language`: ISO 639-1 code for the preferred language (string, e.g., 'en', 'ur')
-
-**Validation Rules**:
-- `preferred_language` must be one of the 5 supported languages (including Urdu, excluding Hindi).
+### SEO metadata
+- **Description**: Search engine optimization metadata
+- **Fields**:
+  - id: string (unique identifier for the content)
+  - title: string (SEO title)
+  - description: string (meta description)
+  - keywords: array of string
+  - author: string
+  - lastModified: date
+- **Relationships**: Associated with Documentation Content

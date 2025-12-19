@@ -1,87 +1,102 @@
-# Quickstart Guide: Physical AI & Humanoid Robotics Textbook
-
-This guide outlines the steps to set up and run the Physical AI & Humanoid Robotics textbook project, including the Docusaurus frontend and the Python RAG backend.
+# Quickstart Guide: Simple Static Documentation Website (No RAG)
 
 ## Prerequisites
 
-*   **Node.js and npm/yarn**: For Docusaurus frontend development.
-*   **Python 3.8+**: For the RAG backend.
-*   **Qdrant**: Local or cloud instance for vector storage.
-*   **Neon (PostgreSQL)**: Account and connection details for metadata storage.
-*   **Google Cloud Account**: For deploying the RAG backend on Cloud Run and using Vertex AI.
-*   **GitHub Account**: For hosting frontend on GitHub Pages and backend deployment (optional).
+- Node.js v18 or higher
+- npm or yarn package manager
+- Git
 
-## Setup Steps
+## Setup Instructions
 
-### 1. Clone the Repository
-
+### 1. Clone the repository
 ```bash
 git clone <repository-url>
-cd <repository-directory>
+cd <repository-name>
 ```
 
-### 2. Setup Frontend (Docusaurus)
+### 2. Install frontend dependencies
+```bash
+cd frontend
+npm install
+```
 
-Navigate to the frontend directory (e.g., `frontend/`) and install dependencies:
+### 3. Run the development server
+```bash
+npm run start
+```
+
+This command starts a local development server and opens the website in your browser at `http://localhost:3000`.
+
+### 4. Build for production
+```bash
+npm run build
+```
+
+This command generates static content in the `build` directory, which can be served using any static hosting service.
+
+## Key Features Configuration
+
+### Homepage Setup
+The homepage is configured in `src/pages/index.js`. The "Start Reading" button links to the documentation.
+
+### Simplified Header
+The header configuration in `docusaurus.config.js` has been updated to include only essential navigation elements and the book name, without logos or extra elements.
+
+### Theme Switching
+Theme switching is handled automatically by Docusaurus. The default theme respects system preferences, but users can toggle manually using the theme switcher in the header. This functionality is preserved in the static site.
+
+### English-Only Documentation
+All documentation content is provided in English only. The multilingual support features have been removed to simplify the user experience.
+
+## Development Commands
 
 ```bash
-cd frontend/
-npm install # or yarn install
+# Run development server with hot reload
+npm run start
+
+# Build static files for production
+npm run build
+
+# Serve the built website locally for testing
+npm run serve
+
+# Run tests
+npm run test
+
+# Check for linting errors
+npm run lint
+
+# Format code
+npm run format
 ```
 
-### 3. Setup Backend (Python RAG)
+## Directory Structure Overview
 
-Navigate to the backend directory (e.g., `backend/`) and set up a virtual environment:
-
-```bash
-cd backend/
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-pip install -r requirements.txt
+```
+frontend/
+├── docs/              # English documentation content only
+├── src/
+│   ├── pages/         # React pages (homepage at index.js)
+│   ├── components/    # Reusable React components (no backend components)
+│   └── css/           # Custom styles
+├── static/            # Static assets
+├── package.json       # NPM package configuration (frontend only)
+├── docusaurus.config.js   # Main Docusaurus configuration (English-only)
+└── sidebars.js        # Navigation sidebar config
 ```
 
-**Environment Variables**: Configure your backend to use your Qdrant, Neon, and Google Cloud credentials. This typically involves setting environment variables (e.g., `QDRANT_URL`, `NEON_DB_URL`, `GCP_PROJECT_ID`, `VERTEX_AI_EMBEDDING_MODEL`, `GEMINI_MODEL_NAME`). A `.env` file is recommended.
+## Customization Points
 
-### 4. Ingest Textbook Data
+### Header Configuration
+Header elements are configured in `docusaurus.config.js` under the `themeConfig.navbar` section. Only essential navigation elements and the book name are included.
 
-Prepare your textbook content (Markdown/MDX files) and place them in the appropriate directory (e.g., `frontend/docs/`). Then, run the data ingestion script to process the content, generate embeddings, and store them in Qdrant and metadata in Neon.
+### Styling
+Custom CSS can be added to `src/css/custom.css`. Docusaurus uses Infima CSS framework by default, but you can override styles as needed.
 
-```bash
-python ingest_data.py
-```
+### Documentation Content
+To add new documentation:
 
-*(Note: `ingest_data.py` script needs to be created as part of implementation.)*
+1. Create a new markdown file in the `docs/` directory
+2. Update `sidebars.js` if you want the new content to appear in navigation
 
-### 5. Run the Development Server
-
-**Frontend**: Start the Docusaurus development server:
-
-```bash
-cd frontend/
-npm start
-```
-
-This will typically run on `http://localhost:3000`.
-
-**Backend**: Start the Python RAG backend API (e.g., using FastAPI): 
-
-```bash
-cd backend/
-uvicorn main:app --reload
-```
-
-This will typically run on `http://localhost:8000`.
-
-## Deployment
-
-### Frontend
-
-Deploy the Docusaurus static site to GitHub Pages. This will involve configuring GitHub Actions to build the site and deploy it to the `gh-pages` branch.
-
-### Backend
-
-Deploy the Python RAG backend to Google Cloud Run. Configure it to use your Qdrant and Neon instances. Ensure CORS is configured correctly to allow requests from your GitHub Pages domain.
-
-## Further Information
-
-Refer to the API documentation (`specs/master/contracts/rag_chatbot_api.yaml`) for details on interacting with the chatbot API.
+Note: No backend functionality is included - this is a static site only.
