@@ -1,7 +1,7 @@
 import logging
 from typing import List, Dict, Any
 from langchain_core.prompts import PromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from langchain_google_vertexai import ChatVertexAI
 from langchain.chains import LLMChain
 from config.settings import settings

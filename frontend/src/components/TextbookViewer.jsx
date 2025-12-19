@@ -31,7 +31,7 @@ export default function TextbookViewer() {
               </div>
 
               <p className="hero__subtitle textbook-subtitle">
-                An interactive textbook with RAG-powered chatbot for enhanced learning
+                An interactive textbook on Physical AI & Humanoid Robotics with engaging learning features
               </p>
             </div>
 
@@ -122,8 +122,8 @@ export default function TextbookViewer() {
             <div className="margin-vert--lg text--center">
               <Link
                 className="button button--primary button--lg textbook-cta-button"
-                to="/ask-book">
-                Ask the Book Chatbot
+                to="/docs/01-introduction">
+                Start Reading
               </Link>
             </div>
 
@@ -134,7 +134,7 @@ export default function TextbookViewer() {
               <p>
                 <Link to="/authors">About the Authors</Link> |
                 <Link to="/docs/01-introduction">Introduction</Link> |
-                <Link to="/ask-book">Ask the Book</Link>
+                <Link to="/docs/intro">Table of Contents</Link>
               </p>
             </div>
           </div>

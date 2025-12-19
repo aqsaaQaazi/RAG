@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Production builds
+build/
+dist/
+out/
+
+# Environment variables
+.env*
+
+# Docusaurus
+.docusaurus/
+.cache/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db

@@ -4,7 +4,7 @@
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Physical AI & Humanoid Robotics Textbook',
-  tagline: 'An interactive textbook with RAG-powered chatbot',
+  tagline: 'An interactive textbook on Physical AI & Humanoid Robotics',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -15,7 +15,7 @@ const config = {
 
   // GitHub pages deployment config.
   organizationName: 'your-organization', // Usually your GitHub org/user name.
-  projectName: 'rag-textbook', // Usually your repo name.
+  projectName: 'textbook-ui', // Updated for textbook-only project
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -25,7 +25,7 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'ur', 'es', 'fr', 'de'],
+    locales: ['en', 'ur', 'es', 'fr', 'de'], // Support for 5 major languages including Urdu
   },
 
   presets: [
@@ -56,7 +56,7 @@ const config = {
       navbar: {
         title: 'Physical AI & Robotics',
         logo: {
-          alt: 'RAG Textbook Logo',
+          alt: 'Textbook Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -66,8 +66,7 @@ const config = {
             position: 'left',
             label: 'Textbook',
           },
-          { to: '/ask-book', label: 'Ask the Book', position: 'left' },
-          { to: '/authors', label: 'Authors', position: 'left' },
+          { to: '/authors', label: 'Authors', position: 'left' }, // Removed 'Ask the Book' link
           {
             type: 'localeDropdown',
             position: 'right',
@@ -89,10 +88,7 @@ const config = {
                 label: 'Textbook',
                 to: '/docs/intro',
               },
-              {
-                label: 'Ask the Book',
-                to: '/ask-book',
-              },
+              // Removed 'Ask the Book' from footer
             ],
           },
           {
@@ -117,7 +113,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} RAG Textbook Project. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics Textbook. Built with Docusaurus.`,
       },
       prism: {
         theme: require('prism-react-renderer').themes.github,
